@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<!-- Add class="dark" for dark mode -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protótipo Visual - Sensy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'display': ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'roxo-escuro': '#190028',
+                        'dourado': '#b79743',
+                        'preto': '#000000',
+                        'cinza-medio': '#555555',
+                        'branco': '#FFFFFF',
+                        'bege-claro': '#FDF8F0',
+                        'texto-light': '#3D2C4E',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        [data-lucide] {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-bege-claro text-texto-light dark:bg-roxo-escuro dark:text-branco font-sans transition-colors duration-300">
+
+    <div id="app" class="pb-20 md:pb-0">
+        <!-- Header (Desktop) -->
+        <header class="hidden md:flex items-center justify-between px-8 py-2 bg-branco/80 dark:bg-preto/80 backdrop-blur-sm sticky top-0 z-40 border-b border-dourado/20">
+            <img src="sensybg.png" alt="Sensy Logo" class="h-16 cursor-pointer" onclick="navigateTo('home')">
+            <nav class="flex items-center gap-6">
+                <a href="#" class="font-sans font-semibold text-base text-texto-light dark:text-branco hover:text-dourado transition-colors" onclick="navigateTo('home')">Home</a>
+                <a href="#" class="font-sans font-semibold text-base text-texto-light dark:text-branco hover:text-dourado transition-colors" onclick="navigateTo('catalog')">Catálogo</a>
+                <a href="#" class="font-sans font-semibold text-base text-texto-light dark:text-branco hover:text-dourado transition-colors">Novidades</a>
+                <a href="#" class="font-sans font-semibold text-base text-texto-light dark:text-branco hover:text-dourado transition-colors">Promoções</a>
+            </nav>
+            <div class="flex items-center gap-4 text-dourado">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-dourado/10">
+                    <i data-lucide="sun" class="block dark:hidden"></i>
+                    <i data-lucide="moon" class="hidden dark:block"></i>
+                </button>
+                <i data-lucide="user" class="cursor-pointer hover:opacity-80" onclick="navigateTo('login')"></i>
+                <i data-lucide="heart" class="cursor-pointer hover:opacity-80"></i>
+                
+                <!-- Cart Icon with Hover Modal -->
+                <div id="cart-wrapper-desktop" class="relative">
+                    <div class="relative cursor-pointer hover:opacity-80" onclick="navigateTo('cart')">
+                        <i data-lucide="shopping-bag"></i>
+                        <span id="cart-count-desktop" class="absolute -top-2 -right-2 bg-dourado text-preto text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </div>
+                    
+                    <!-- Cart Preview Modal -->
+                    <div id="cart-preview-modal" class="absolute top-full right-0 mt-2 w-80 bg-bege-claro dark:bg-preto border border-dourado/20 rounded-lg shadow-xl z-50 p-4 hidden opacity-0 transition-opacity duration-200">
+                        <div id="cart-preview-items" class="max-h-64 overflow-y-auto pr-2 no-scrollbar">
+                            <!-- Preview items will be injected here -->
+                        </div>
+                        <div id="cart-preview-actions" class="mt-4 pt-4 border-t border-dourado/20">
+                             <!-- Actions will be injected here when cart is not empty -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Home Page -->
+            <section id="home-page" class="page active">
+                <!-- Banner Section -->
+                <div class="relative h-[60vh] md:h-[70vh] flex items-center justify-center text-center px-4 bg-cover bg-center" style="background-image: url('https://placehold.co/1920x1080/190028/b79743?text=Sensy+Banner');">
+                    <div class="absolute inset-0 bg-preto/60"></div>
+                    <div class="relative z-10">
+                        <h1 class="text-4xl md:text-6xl font-display font-bold text-dourado leading-tight drop-shadow-lg">Redescubra o Prazer</h1>
+                        <p class="mt-4 text-lg md:text-xl text-branco/90 max-w-2xl mx-auto">Coleções exclusivas para seus momentos mais íntimos.</p>
+                        <button onclick="navigateTo('catalog')" class="mt-8 bg-dourado text-preto font-bold text-lg py-3 px-8 rounded-full transform hover:scale-105 transition-transform">Ver Coleção</button>
+                    </div>
+                </div>
+                
+                <!-- Most Desired Products Section -->
+                <div class="container mx-auto p-4 md:p-8">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl md:text-4xl font-display font-bold text-dourado">Os Mais Desejados</h2>
+                        <p class="font-sans text-lg text-texto-light/80 dark:text-branco/70 mt-2">Os favoritos de nossas clientes.</p>
+                    </div>
+                    <div id="desired-product-grid" class="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
+                        <!-- Desired product cards will be injected here by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Catalog Page -->
+            <section id="catalog-page" class="page hidden">
+                <div class="container mx-auto p-4 md:p-8">
+                    <div class="text-center md:text-left mb-8">
+                        <h2 class="text-4xl md:text-5xl font-display font-bold text-dourado">Nosso Catálogo</h2>
+                        <p class="font-sans text-lg text-texto-light/80 dark:text-branco/70 mt-2">Descubra novas sensações e prazeres.</p>
+                    </div>
+                    <!-- Filters and Products -->
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <!-- Filters (Desktop) -->
+                        <aside class="hidden md:block w-1/4 bg-branco/50 dark:bg-transparent p-6 rounded-lg">
+                            <h3 class="font-display text-2xl font-bold text-dourado mb-4">Filtros</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-sans font-bold mb-2 text-texto-light dark:text-branco">Categorias</h4>
+                                    <ul class="space-y-1 font-sans text-texto-light/80 dark:text-branco/80">
+                                        <li class="cursor-pointer hover:text-dourado">Vibradores</li>
+                                        <li class="cursor-pointer hover:text-dourado">Lingeries</li>
+                                        <li class="cursor-pointer hover:text-dourado">BDSM</li>
+                                        <li class="cursor-pointer hover:text-dourado">Cosméticos</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-sans font-bold mb-2 text-texto-light dark:text-branco">Faixa de Preço</h4>
+                                    <input type="range" class="w-full accent-dourado">
+                                </div>
+                                <div>
+                                    <h4 class="font-sans font-bold mb-2 text-texto-light dark:text-branco">Avaliação</h4>
+                                    <div class="flex items-center gap-1 text-dourado">
+                                        <i data-lucide="star" class="fill-current"></i>
+                                        <i data-lucide="star" class="fill-current"></i>
+                                        <i data-lucide="star" class="fill-current"></i>
+                                        <i data-lucide="star" class="fill-current"></i>
+                                        <i data-lucide="star" class="text-cinza-medio"></i>
+                                        <span class="text-texto-light/70 dark:text-branco/70 ml-1 font-sans text-sm">4 e acima</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+                        <!-- Product Grid -->
+                        <div id="product-grid" class="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6">
+                            <!-- Product cards will be injected here by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Product Detail Page -->
+            <section id="product-detail-page" class="page hidden">
+                <!-- Product details will be injected here by JS -->
+            </section>
+            
+            <!-- Cart Page -->
+            <section id="cart-page" class="page hidden">
+                <div class="container mx-auto p-4 md:p-8">
+                    <h2 class="text-4xl md:text-5xl font-display font-bold text-dourado text-center mb-8">Meu Carrinho</h2>
+                    <div id="cart-items" class="max-w-2xl mx-auto">
+                        <!-- Cart items will be injected here -->
+                    </div>
+                    <div id="cart-summary" class="max-w-2xl mx-auto mt-8 bg-branco/50 dark:bg-preto/50 p-6 rounded-lg border border-dourado/20">
+                        <!-- Cart summary will be injected here -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Login/Register Page -->
+            <section id="login-page" class="page hidden">
+                <div class="min-h-screen flex items-center justify-center px-4">
+                    <div class="max-w-md w-full bg-branco dark:bg-preto p-8 rounded-2xl shadow-lg border border-dourado/20">
+                        <img src="sensybg.png" alt="Sensy Logo" class="h-20 mx-auto mb-4">
+                        <h2 class="text-3xl font-display font-bold text-dourado text-center mb-2">Bem-vinda de volta</h2>
+                        <p class="text-center font-sans text-texto-light/80 dark:text-branco/70 mb-8">Acesse sua conta para continuar.</p>
+                        <form class="space-y-6">
+                            <div>
+                                <label for="email" class="block text-sm font-sans font-medium text-texto-light dark:text-branco/80">Email</label>
+                                <input type="email" name="email" id="email" class="mt-1 block w-full bg-bege-claro dark:bg-roxo-escuro border-cinza-medio rounded-md shadow-sm focus:ring-dourado focus:border-dourado p-3 text-texto-light dark:text-branco">
+                            </div>
+                             <div>
+                                <label for="password" class="block text-sm font-sans font-medium text-texto-light dark:text-branco/80">Senha</label>
+                                <input type="password" name="password" id="password" class="mt-1 block w-full bg-bege-claro dark:bg-roxo-escuro border-cinza-medio rounded-md shadow-sm focus:ring-dourado focus:border-dourado p-3 text-texto-light dark:text-branco">
+                            </div>
+                            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-preto bg-dourado hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-preto focus:ring-dourado">Entrar</button>
+                            <p class="text-center text-sm font-sans text-texto-light/80 dark:text-branco/70">
+                                Não tem uma conta? <a href="#" class="font-medium text-dourado">Cadastre-se</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-branco dark:bg-preto border-t border-dourado/20 mt-12 py-12 px-4 md:px-8">
+            <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+                <!-- Institucional -->
+                <div>
+                    <h3 class="font-display font-bold text-dourado mb-4">Institucional</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Sobre a Sensy</a></li>
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Política de Privacidade</a></li>
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Termos de Uso</a></li>
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+                <!-- Ajuda -->
+                <div>
+                    <h3 class="font-display font-bold text-dourado mb-4">Ajuda</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Dúvidas Frequentes</a></li>
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Fale Conosco</a></li>
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Entregas e Devoluções</a></li>
+                    </ul>
+                </div>
+                <!-- Minha Conta -->
+                <div>
+                    <h3 class="font-display font-bold text-dourado mb-4">Minha Conta</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Meus Pedidos</a></li>
+                        <li><a href="#" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Favoritos</a></li>
+                        <li><a href="#" onclick="navigateTo('login')" class="text-texto-light/80 dark:text-branco/70 hover:text-dourado transition-colors">Login</a></li>
+                    </ul>
+                </div>
+                <!-- Redes Sociais -->
+                <div>
+                    <h3 class="font-display font-bold text-dourado mb-4">Siga-nos</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-dourado hover:opacity-80"><i data-lucide="instagram"></i></a>
+                        <a href="#" class="text-dourado hover:opacity-80"><i data-lucide="twitter"></i></a>
+                        <a href="#" class="text-dourado hover:opacity-80"><i data-lucide="facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="container mx-auto text-center border-t border-dourado/10 mt-8 pt-6">
+                <p class="text-xs text-texto-light/60 dark:text-branco/60">
+                    © 2025 Sensy - Todos os direitos reservados. <br>
+                    JANAINA CAVALCANTE DE CARVALHO - CNPJ: 61.055.859/0001-92
+                </p>
+            </div>
+        </footer>
+
+
+        <!-- Bottom Navigation (Mobile) -->
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-branco/90 dark:bg-preto/90 backdrop-blur-sm border-t border-dourado/20 flex justify-around p-2 z-40">
+            <a href="#" class="flex flex-col items-center gap-1 text-dourado" onclick="navigateTo('home')">
+                <i data-lucide="home"></i>
+                <span class="text-xs font-medium">Início</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1 text-texto-light/80 dark:text-branco/70 hover:text-dourado" onclick="navigateTo('catalog')">
+                <i data-lucide="search"></i>
+                <span class="text-xs font-medium">Buscar</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1 text-texto-light/80 dark:text-branco/70 hover:text-dourado" onclick="navigateTo('cart')">
+                <div class="relative">
+                    <i data-lucide="shopping-bag"></i>
+                    <span id="cart-count-mobile" class="absolute -top-1 -right-1 bg-dourado text-preto text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
+                </div>
+                <span class="text-xs font-medium">Carrinho</span>
+            </a>
+             <a href="#" class="flex flex-col items-center gap-1 text-texto-light/80 dark:text-branco/70 hover:text-dourado">
+                <i data-lucide="heart"></i>
+                <span class="text-xs font-medium">Favoritos</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1 text-texto-light/80 dark:text-branco/70 hover:text-dourado" onclick="navigateTo('login')">
+                <i data-lucide="user"></i>
+                <span class="text-xs font-medium">Perfil</span>
+            </a>
+        </nav>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-24 md:bottom-10 right-10 bg-dourado text-preto py-2 px-5 rounded-lg shadow-xl text-sm font-semibold opacity-0 translate-y-4 transition-all duration-300">
+            Produto adicionado ao carrinho!
+        </div>
+
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: 'Vibrador Ponta Curva', price: 249.90, image: 'https://placehold.co/400x400/190028/b79743?text=Sensy', rating: 5, reviews: 128, category: 'vibradores', tag: 'Mais Vendido' },
+            { id: 2, name: 'Conjunto Lingerie Renda', price: 189.90, image: 'https://placehold.co/400x400/190028/b79743?text=Sensy', rating: 4, reviews: 92, category: 'lingeries' },
+            { id: 3, name: 'Óleo de Massagem Corporal', price: 89.90, image: 'https://placehold.co/400x400/190028/b79743?text=Sensy', rating: 5, reviews: 210, category: 'cosmeticos', tag: 'Top Avaliado' },
+            { id: 4, name: 'Kit Iniciante BDSM', price: 349.90, image: 'https://placehold.co/400x400/000000/b79743?text=Sensy', rating: 5, reviews: 76, category: 'bdsm', tag: 'Em Oferta' },
+            { id: 5, name: 'Satisfyer Pro 2', price: 499.90, image: 'https://placehold.co/400x400/190028/b79743?text=Sensy', rating: 5, reviews: 450, category: 'vibradores' },
+            { id: 6, name: 'Vela Beijável Sabor Morango', price: 59.90, image: 'https://placehold.co/400x400/190028/b79743?text=Sensy', rating: 4, reviews: 150, category: 'cosmeticos' },
+        ];
+
+        let cart = [];
+        let currentPage = 'home';
+
+        // --- Navigation ---
+        function navigateTo(pageId, productId = null) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+                page.classList.remove('active');
+            });
+            const targetPage = document.getElementById(`${pageId}-page`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                targetPage.classList.add('active');
+                currentPage = pageId;
+                window.scrollTo(0, 0);
+
+                if (pageId === 'product-detail' && productId) {
+                    renderProductDetail(productId);
+                }
+                if (pageId === 'cart') {
+                    renderCart();
+                }
+                 if (pageId === 'login') {
+                    // This is just to show the page, in a real app it would have more logic
+                }
+            }
+        }
+
+        // --- Rendering ---
+        function renderCard(product) {
+            return `
+                <div class="bg-branco/50 dark:bg-preto/50 border border-dourado/10 rounded-lg overflow-hidden shadow-sm hover:shadow-dourado/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="navigateTo('product-detail', ${product.id})">
+                    <div class="relative">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 md:h-64 object-cover">
+                        ${product.tag ? `<span class="absolute top-2 left-2 bg-dourado text-preto text-xs font-bold px-2 py-1 rounded-full font-sans">${product.tag}</span>` : ''}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-display font-semibold text-lg truncate text-texto-light dark:text-branco">${product.name}</h3>
+                        <div class="flex items-center my-2">
+                            <div class="flex text-dourado">
+                                ${[...Array(5)].map((_, i) => `<i data-lucide="star" class="${i < product.rating ? 'fill-current' : 'text-cinza-medio'}" style="width: 16px; height: 16px;"></i>`).join('')}
+                            </div>
+                            <span class="text-xs text-texto-light/60 dark:text-branco/60 ml-2 font-sans">(${product.reviews})</span>
+                        </div>
+                        <p class="font-sans font-bold text-xl text-dourado">R$ ${product.price.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDesiredProducts() {
+            const grid = document.getElementById('desired-product-grid');
+            const desiredProducts = products.slice(0, 4); 
+            grid.innerHTML = desiredProducts.map(p => renderCard(p)).join('');
+        }
+
+        function renderProductGrid() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map(p => renderCard(p)).join('');
+        }
+
+        function renderProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            const detailContainer = document.getElementById('product-detail-page');
+            detailContainer.innerHTML = `
+                <div class="container mx-auto p-4 md:p-8">
+                    <button class="mb-4 text-sm font-semibold flex items-center gap-2 text-texto-light/80 dark:text-branco/80 hover:text-dourado transition-colors" onclick="navigateTo('catalog')">
+                        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                        Voltar para o catálogo
+                    </button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                        <div>
+                            <img src="${product.image.replace('400x400', '600x600')}" alt="${product.name}" class="w-full rounded-lg shadow-lg border border-dourado/20">
+                        </div>
+                        <div>
+                            <h2 class="text-4xl md:text-5xl font-display font-bold text-dourado">${product.name}</h2>
+                            <div class="flex items-center my-4">
+                               <div class="flex text-dourado">
+                                    ${[...Array(5)].map((_, i) => `<i data-lucide="star" class="${i < product.rating ? 'fill-current' : ''}" style="width: 20px; height: 20px;"></i>`).join('')}
+                                </div>
+                                <span class="text-sm text-texto-light/70 dark:text-branco/70 ml-2 font-sans">${product.reviews} avaliações</span>
+                            </div>
+                            <p class="text-3xl font-sans font-bold my-4 text-dourado">R$ ${product.price.toFixed(2).replace('.', ',')}</p>
+                            <p class="font-sans text-texto-light/80 dark:text-branco/80 leading-relaxed">Descrição curta e envolvente do produto, destacando seus principais benefícios e o tipo de experiência que ele proporciona. Feito com materiais seguros para o corpo.</p>
+                            <div class="mt-8 flex items-center gap-4">
+                                <button class="w-full py-4 px-6 rounded-full bg-dourado text-preto font-bold text-lg transform hover:scale-105 transition-transform" onclick="addToCart(${product.id})">
+                                    Adicionar ao Carrinho
+                                </button>
+                                <button class="p-4 rounded-full bg-branco/50 dark:bg-preto/50 border border-dourado/20 text-dourado">
+                                    <i data-lucide="heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Details Tabs -->
+                    <div class="mt-12">
+                        <div class="border-b border-dourado/20">
+                            <nav id="product-tabs" class="flex gap-8 -mb-px">
+                                <button data-tab="details" class="tab-btn py-4 px-1 border-b-2 border-dourado font-semibold text-dourado">Detalhes do Produto</button>
+                                <button data-tab="reviews" class="tab-btn py-4 px-1 border-b-2 border-transparent text-texto-light/70 dark:text-branco/70 hover:border-cinza-medio hover:text-texto-light dark:hover:text-branco">Avaliações (${product.reviews})</button>
+                            </nav>
+                        </div>
+                        <div>
+                            <div id="details-panel" class="tab-panel py-8">
+                                <h3 class="font-display font-bold text-xl mb-4 text-dourado">Especificações</h3>
+                                <ul class="space-y-2 text-texto-light/80 dark:text-branco/80 list-disc list-inside font-sans">
+                                    <li>Material: Silicone médico hipoalergênico</li>
+                                    <li>Dimensões: 18cm x 3.5cm</li>
+                                    <li>Modos de vibração: 10 padrões</li>
+                                    <li>Resistência: À prova d'água</li>
+                                    <li>Bateria: Recarregável via USB</li>
+                                </ul>
+                                <h3 class="font-display font-bold text-xl mt-6 mb-4 text-dourado">Cuidados e Higienização</h3>
+                                <p class="font-sans text-texto-light/80 dark:text-branco/80 leading-relaxed">Lave seu produto antes e após cada uso com água morna e sabão neutro. Para uma higienização completa, utilize um limpador de brinquedos específico. Seque com um pano macio que não solte fiapos e guarde em um local limpo e seco.</p>
+                            </div>
+                            <div id="reviews-panel" class="tab-panel py-8 hidden">
+                                <h3 class="font-display font-bold text-xl mb-4 text-dourado">O que nossas clientes dizem</h3>
+                                <p class="font-sans text-texto-light/80 dark:text-branco/80">Funcionalidade de avaliações em breve.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+            lucide.createIcons();
+
+            // Add event listeners for the new tabs
+            const tabButtons = detailContainer.querySelectorAll('.tab-btn');
+            const tabPanels = detailContainer.querySelectorAll('.tab-panel');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('border-dourado', 'text-dourado');
+                        btn.classList.add('border-transparent', 'text-texto-light/70', 'dark:text-branco/70');
+                    });
+                    tabPanels.forEach(panel => panel.classList.add('hidden'));
+
+                    button.classList.add('border-dourado', 'text-dourado');
+                    button.classList.remove('border-transparent', 'text-texto-light/70', 'dark:text-branco/70');
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-panel`).classList.remove('hidden');
+                });
+            });
+        }
+
+        function renderCartPreview() {
+            const previewItemsContainer = document.getElementById('cart-preview-items');
+            const previewActionsContainer = document.getElementById('cart-preview-actions');
+
+            if (cart.length === 0) {
+                previewItemsContainer.innerHTML = `<p class="text-center text-sm text-texto-light/70 dark:text-branco/70">Seu carrinho está vazio.</p>`;
+                previewActionsContainer.innerHTML = '';
+                return;
+            }
+
+            previewItemsContainer.innerHTML = cart.map(item => `
+                <div class="flex items-center gap-3 mb-3">
+                    <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-md">
+                    <div class="flex-grow overflow-hidden">
+                        <h5 class="font-display text-sm font-semibold truncate">${item.name}</h5>
+                        <p class="text-xs text-texto-light/70 dark:text-branco/70">Qtd: ${item.quantity}</p>
+                    </div>
+                    <p class="text-sm font-sans font-bold text-dourado">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                </div>
+            `).join('');
+            
+            previewActionsContainer.innerHTML = `
+                <div class="flex items-center justify-between">
+                     <button onclick="emptyCart()" class="text-xs text-cinza-medio hover:text-red-500 underline transition-colors">Esvaziar</button>
+                     <button onclick="navigateTo('cart')" class="text-sm font-bold bg-dourado text-preto py-2 px-4 rounded-full hover:opacity-90 transition-opacity">Finalizar Compra</button>
+                </div>
+            `;
+        }
+
+        function renderCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartSummaryContainer = document.getElementById('cart-summary');
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `<p class="text-center font-sans text-texto-light/70 dark:text-branco/70">Seu carrinho está vazio.</p>`;
+                cartSummaryContainer.innerHTML = '';
+                return;
+            }
+            
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="flex items-center gap-4 mb-4 bg-branco/50 dark:bg-preto/50 p-4 rounded-lg border border-dourado/10">
+                    <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-md">
+                    <div class="flex-grow">
+                        <h4 class="font-display font-semibold text-lg">${item.name}</h4>
+                        <p class="text-sm text-dourado font-sans font-bold">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="number" value="${item.quantity}" min="1" class="w-16 text-center bg-bege-claro dark:bg-roxo-escuro rounded-md p-1 border border-cinza-medio text-texto-light dark:text-branco">
+                        <button onclick="removeFromCart(${item.id})"><i data-lucide="trash-2" class="text-cinza-medio hover:text-red-500"></i></button>
+                    </div>
+                </div>
+            `).join('');
+
+            const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+            cartSummaryContainer.innerHTML = `
+                <h3 class="text-2xl font-display font-bold text-dourado mb-4">Resumo do Pedido</h3>
+                <div class="flex justify-between mb-2 font-sans">
+                    <span>Subtotal</span>
+                    <span class="font-sans font-semibold">R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div class="flex justify-between mb-4 text-texto-light/70 dark:text-branco/70 font-sans">
+                    <span>Frete</span>
+                    <span>A calcular</span>
+                </div>
+                <div class="border-t border-dourado/20 pt-4 flex justify-between font-bold text-lg font-sans">
+                    <span>Total</span>
+                    <span class="text-dourado font-sans">R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <button class="w-full mt-6 py-3 px-6 rounded-full bg-dourado text-preto font-bold transform hover:scale-105 transition-transform">
+                    Finalizar Compra
+                </button>
+            `;
+            lucide.createIcons();
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count-desktop').textContent = totalItems;
+            document.getElementById('cart-count-mobile').textContent = totalItems;
+        }
+        
+        // --- Cart Logic ---
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            updateCartCount();
+            showToast();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            renderCart();
+        }
+
+        function emptyCart() {
+            cart = [];
+            updateCartCount();
+            renderCartPreview();
+            if(currentPage === 'cart'){
+                renderCart();
+            }
+        }
+        
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4');
+            }, 2000);
+        }
+
+        // --- Theme Logic ---
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                applyTheme('light'); // Define 'light' como padrão
+            }
+
+            // Add event listener for theme toggle button
+            const themeToggleButton = document.getElementById('theme-toggle');
+            themeToggleButton.addEventListener('click', toggleTheme);
+
+            renderDesiredProducts();
+            renderProductGrid();
+            lucide.createIcons();
+
+            // Cart Preview Hover Logic
+            const cartWrapper = document.getElementById('cart-wrapper-desktop');
+            const cartModal = document.getElementById('cart-preview-modal');
+            let hideCartTimeout;
+
+            cartWrapper.addEventListener('mouseenter', () => {
+                clearTimeout(hideCartTimeout);
+                renderCartPreview();
+                cartModal.classList.remove('hidden');
+                setTimeout(() => cartModal.classList.remove('opacity-0'), 10); 
+            });
+
+            cartWrapper.addEventListener('mouseleave', () => {
+                hideCartTimeout = setTimeout(() => {
+                    cartModal.classList.add('opacity-0');
+                    setTimeout(() => cartModal.classList.add('hidden'), 200); 
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
+
